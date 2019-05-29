@@ -1,8 +1,10 @@
 import csv
 from datetime import time
 from datetime import datetime
-from collections import Counter, namedtuple
-from typing import List, NamedTuple
+from collections import Counter
+from typing import List
+
+from bici_estaciones.business.station import Station
 
 
 class CsvConnector:
@@ -80,7 +82,7 @@ class CsvFetcher:
         travel_start_time_object = datetime.fromisoformat(travel_start_time).time()
         return self._filter_range_start <= travel_start_time_object <= self._filter_range_end
 
-    def fetch_filtered(self, amount: int) -> List[NamedTuple]:
+    def fetch_filtered(self, amount: int) -> List[Station]:
         """
         Filters and fetches the required data from the csv, using
         a generator that loads the data using the given time filter.
@@ -90,13 +92,16 @@ class CsvFetcher:
         """
         try:
             reader = self._connector.reader
-            station = namedtuple('Station', 'name departures_amount')
             filtered_gen = (
                 Row(row['bici_nombre_estacion_origen']).start_station
                 for row in reader
                 if self._is_in_time_range(row['bici_Fecha_hora_retiro'])
             )
             counter = Counter(filtered_gen)
-            return sorted([station(*x) for x in counter.items()], key=lambda x: x[1], reverse=True)[0:amount]
+            return sorted(
+                [Station(*station) for station in counter.items()],
+                key=lambda station: station.departures_amount,
+                reverse=True
+            )[0:amount]
         finally:
             self._connector.fh.close()
