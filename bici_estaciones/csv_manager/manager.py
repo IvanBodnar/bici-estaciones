@@ -1,6 +1,5 @@
 import csv
-from datetime import time
-from datetime import datetime
+from datetime import datetime, time
 from collections import Counter
 from typing import List
 
