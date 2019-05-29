@@ -22,8 +22,8 @@ class CsvConnector:
         try:
             self.fh = open(self._file_path, 'r')
             return csv.DictReader(self.fh)
-        except FileNotFoundError:
-            print('File was not found')
+        except FileNotFoundError as e:
+            raise e
 
 
 class Row:
