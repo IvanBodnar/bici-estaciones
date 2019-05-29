@@ -1,6 +1,4 @@
 import csv
-from typing import Generator
-from collections import OrderedDict
 
 
 class CsvConnector:
@@ -10,15 +8,23 @@ class CsvConnector:
     """
     def __init__(self, file_path: str):
         self._file_path = file_path
+        self.fh = None
 
-    def connect(self) -> Generator[OrderedDict]:
+    @property
+    def reader(self) -> csv.DictReader:
         """
-        Opens the csv file and returns a generator,
-        in order to deal with large csv files.
+        Opens the csv file and returns a DictReader.
         """
         try:
-            with open(self._file_path, 'r') as fh:
-                reader = csv.DictReader(fh)
-                yield next(reader)
+            self.fh = open(self._file_path, 'r')
+            return csv.DictReader(self.fh)
         except FileNotFoundError:
             print('File was not found')
+
+
+class CsvFetcher:
+    def __init__(self, connector: CsvConnector):
+        self._connector = connector
+
+    def fetch_filtered(self):
+        reader = self._connector.reader
