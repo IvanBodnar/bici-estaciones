@@ -48,3 +48,10 @@ class TestCsvFetcher:
         assert fetcher._is_in_time_range('2018-01-01 09:31:00')
         assert not fetcher._is_in_time_range('2018-01-01 05:59:00')
         assert not fetcher._is_in_time_range('2018-01-01 12:00:00')
+
+    def test_fetch_filtered(self):
+        connector = CsvConnector('./bici_estaciones/csv_manager/recorridos.csv')
+        fetcher = CsvFetcher(connector, '06:00:00', '11:59:00')
+        rides = fetcher.fetch_filtered(3)
+        assert isinstance(rides, list)
+        assert len(rides) == 3
