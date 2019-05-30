@@ -3,7 +3,12 @@ from datetime import datetime, time
 from collections import Counter
 from typing import List
 
+import requests
+
 from bici_estaciones.business.station import Station
+from bici_estaciones.external.download import downloader
+
+URL = 'http://cdn.buenosaires.gob.ar/datosabiertos/datasets/bicicletas-publicas/recorridos-realizados-2018.csv'
 
 
 class CsvConnector:
@@ -24,8 +29,11 @@ class CsvConnector:
         try:
             self.fh = open(self._file_path, 'r')
             return csv.DictReader(self.fh)
-        except FileNotFoundError as e:
-            raise e
+        except FileNotFoundError:
+            print('File not found. Downloading...')
+            downloader(self._file_path)
+            self.fh = open(self._file_path, 'r')
+            return csv.DictReader(self.fh)
 
 
 class Row:
@@ -89,6 +97,7 @@ class CsvFetcher:
         and the amount of travels started on that station.
         :param amount: int representing the amount of stations to return.
         """
+        print('Procesando los Datos...')
         try:
             reader = self._connector.reader
             filtered_gen = (
