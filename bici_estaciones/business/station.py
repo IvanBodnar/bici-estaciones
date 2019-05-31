@@ -9,7 +9,7 @@ class Station:
         self._departures_amount = departures_amount
 
     @property
-    def departures_amount(self):
+    def departures_amount(self) -> int:
         return self._departures_amount
 
     def __repr__(self):

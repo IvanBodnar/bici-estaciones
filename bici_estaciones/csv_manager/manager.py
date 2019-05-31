@@ -62,7 +62,7 @@ class CsvFetcher:
         self._filter_range_end = self._convert_to_time(filter_range_end)
 
     @staticmethod
-    def _convert_to_time(time_string: str):
+    def _convert_to_time(time_string: str) -> time:
         """
         Helper method to convert a string representing a datetime
         to a time object.
