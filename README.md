@@ -1,4 +1,4 @@
-###Installation
+### Installation
 - Clone the repository.  **The download will take a while, since it has to fetch the csv file**  
 $ git clone git@github.com:IvanBodnar/bici-estaciones.git
 
