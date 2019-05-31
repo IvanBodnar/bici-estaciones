@@ -13,4 +13,4 @@ class Station:
         return self._departures_amount
 
     def __repr__(self):
-        return f'Estación: {self._name.lower().capitalize()} - Cantidad de Viajes: {self._departures_amount}'
+        return 'Estación: {} - Cantidad de Viajes: {}'.format(self._name.lower().capitalize(), self._departures_amount)
